@@ -1,11 +1,11 @@
 from django.views.decorators.http import require_http_methods
-from atm_reading_proj.main.service import MainService
+from .service import MainService
 
 
 # Create your views here.
 @require_http_methods(["GET"])
-def info(request, atm_identifier):
-    return MainService().info(atm_identifier)
+def info(request, atm_device_id):
+    return MainService().info(atm_device_id)
 
 @require_http_methods(["POST"])
 def validate(request, data):
@@ -30,7 +30,7 @@ def activity(request, data):
     if activity_type is None:
         return 'activity_type is required'
 
-    return MainService().activity(activity_type, card_number, token, data.get("atm_identifier"), data.get("balance_amount"))
+    return MainService().activity(activity_type, card_number, token, data.get("atm_device_id"), data.get("balance_amount"))
 
 
 
