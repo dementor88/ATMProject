@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'atm_reading_proj.atm_device.apps.AtmDeviceConfig',
+    'atm_reading_proj.main.apps.MainConfig',
+    'atm_reading_proj.bank.apps.BankConfig',
 ]
 
 MIDDLEWARE = [

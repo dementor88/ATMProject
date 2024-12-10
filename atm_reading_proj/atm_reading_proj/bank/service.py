@@ -1,7 +1,6 @@
 import binascii
 import os
-
-from atm_reading_proj.bank.models import Bank, BankCheckToken
+from .models import Bank, BankCheckToken
 
 
 class BankService(object):
@@ -19,8 +18,8 @@ class BankService(object):
             self._add_to_cache(bank)
         return bank
 
-    def add_bank(self, data):
-        Bank().add(data)
+    def add_bank(self, bank_code, bank_name, bank_info):
+        return Bank().add(bank_code, bank_name, bank_info)
 
     def check_token(self, card_number, token):
         return BankCheckToken().check_token(card_number, token)
@@ -39,8 +38,7 @@ class BankService(object):
                 'bank_code': '12C',
                 'owner': '개발자',
                 'account_number': '123-456-789',
-                'remaining balance': '500,000',
-                'currency': 'won'
+                'remaining balance': 500,000,
             }
         '''
         return {
@@ -48,8 +46,7 @@ class BankService(object):
             'bank_code': '12C',
             'owner': '개발자',
             'account_number': '123-456-789',
-            'remaining balance': '500,000',
-            'currency': 'won'
+            'remaining balance': 500000,
         }
 
     def validate_pin(self, card_number, encrypted_input_pin):

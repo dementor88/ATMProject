@@ -13,4 +13,8 @@ def add_bank(request, data):
     bank_code = data.get("bank_code", None)
     if not bank_code:
         return 'bank_code is required'
-    return BankService().add_bank(bank_code)
+    bank_name = data.get("bank_name", None)
+    if not bank_name:
+        return 'bank_name is required'
+    bank_info = data.get("bank_info", None)
+    return BankService().add_bank(bank_code, bank_name, bank_info)

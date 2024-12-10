@@ -5,8 +5,8 @@ from django.db import models
 # Create your models here.
 # TODO: in case we need to store and query bank info
 class Bank(models.Model):
-    bank_name = models.CharField(max_length=120)
-    bank_code = models.CharField(unique=True)
+    bank_name = models.CharField(max_length=100)
+    bank_code = models.CharField(unique=True, max_length=100)
     bank_info = models.JSONField()  # may include additional extra info
 
     def get(self, bank_code):
@@ -15,13 +15,14 @@ class Bank(models.Model):
         except Bank.DoesNotExist:
             return None
 
-    def add(self, data):
-        Bank.objects.create(bank_name=data['bank_name'], bank_code=data['bank_code'], bank_info=data['bank_info'])
+    def add(self, bank_code, bank_name, bank_info):
+        bank = Bank.objects.create(bank_name=bank_name, bank_code=bank_code, bank_info=bank_info)
+        return bank.id
 
 TOKEN_LIFE = 60 # seconds
 class BankCheckToken(models.Model):
-    card_number = models.CharField(max_length=120)
-    token = models.CharField(max_length=120)
+    card_number = models.CharField(max_length=100)
+    token = models.CharField(max_length=100)
     expires = models.DateTimeField()
 
     def add(self, card_number, token):

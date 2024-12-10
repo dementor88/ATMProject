@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AtmCashConfig(AppConfig):
+class AtmDeviceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'atm_device'
+    name = 'atm_reading_proj.atm_device'
