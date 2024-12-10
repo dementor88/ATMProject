@@ -12,7 +12,8 @@ class ATMDeviceService(object):
         atm_device = self.atm_cache.get(atm_device_id)
         if atm_device is None:
             atm_device = ATM().get(atm_device_id)
-            self._add_to_cache(atm_device)
+            if atm_device is not None:
+                self._add_to_cache(atm_device)
         return atm_device
 
     def create_atm_deivce(self, atm_device_id, remaining_cash, atm_info):
@@ -28,9 +29,10 @@ class ATMDeviceService(object):
         '''
         atm_device = self.get_atm_device(atm_device_id)
         if atm_device is None:
-            return False
-        atm_device.update(cash_amount=atm_device.cash_amount + balance_amount)
-        return True
+            return 'atm_device_id is invalid'
+        atm_device.remaining_cash=atm_device.remaining_cash + balance_amount
+        atm_device.save()
+        return True     # TODO: need to return remaining balance in account
 
     def withdraw_balance(self, atm_device_id, balance_amount):
         # TODO: check withdraw is possible, and update cash amount of ATM device after withdraw
@@ -42,11 +44,12 @@ class ATMDeviceService(object):
         '''
         atm_device = self.get_atm_device(atm_device_id)
         if atm_device is None:
-            return False
-        if atm_device.cash_amount > balance_amount:
-            atm_device.update(cash_amount=atm_device.cash_amount + balance_amount)
-            return True
-        return False
+            return 'atm_device_id is invalid'
+        if atm_device.remaining_cash > balance_amount:
+            atm_device.remaining_cash=atm_device.remaining_cash - balance_amount
+            atm_device.save()
+            return True     # TODO: need to return remaining balance in account
+        return 'atm_device does not have enough cash'
 
     def update_cash_amount(self, atm_device_id, cash_amount):
         # TODO: update cash amount of ATM device
@@ -59,6 +62,7 @@ class ATMDeviceService(object):
         atm_device = self.get_atm_device(atm_device_id)
         if atm_device is None:
             return False
-        atm_device.update(cash_amount=cash_amount)
+        atm_device.remaining_cash=cash_amount
+        atm_device.save()
         return True
 

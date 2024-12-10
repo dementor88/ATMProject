@@ -29,8 +29,11 @@ def activity(request, data):
     activity_type = data.get("activity_type", None)
     if activity_type is None:
         return 'activity_type is required'
+    atm_device_id = data.get("atm_device_id", None)
+    if atm_device_id is None:
+        return 'atm_device_id is required'
 
-    return MainService().activity(activity_type, card_number, token, data.get("atm_device_id"), data.get("balance_amount"))
+    return MainService().activity(activity_type, card_number, token, atm_device_id, data.get("balance_amount"))
 
 
 

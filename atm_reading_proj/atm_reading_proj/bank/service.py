@@ -1,7 +1,7 @@
 import binascii
 import os
 from .models import Bank, BankCheckToken
-
+from django.conf import settings
 
 class BankService(object):
     def __init__(self):
@@ -38,15 +38,16 @@ class BankService(object):
                 'bank_code': '12C',
                 'owner': '개발자',
                 'account_number': '123-456-789',
-                'remaining balance': 500,000,
+                'remaining_balance': 500,000,
             }
         '''
+        # TODO: should return actual value retrieved from bank system
         return {
             'bank_name': '코드은행',
             'bank_code': '12C',
             'owner': '개발자',
             'account_number': '123-456-789',
-            'remaining balance': 500000,
+            'remaining_balance': 500000,
         }
 
     def validate_pin(self, card_number, encrypted_input_pin):
@@ -65,7 +66,7 @@ class BankService(object):
         def generate_key():
             return binascii.hexlify(os.urandom(20)).decode()
 
-        valid_check = True # TODO: implement actual function
+        valid_check = settings.BANK_SYSTEM_TESTRUN   # TODO: implement actual function
 
         if not valid_check:
             return {'valid': False, 'error': 'PIN is not valid'}

@@ -22,7 +22,9 @@ class MainService(object):
 
         return result['token']
 
-    def activity(self, activity_type, card_number, token, atm_device_id=None, balance_amount=None):
+    def activity(self, activity_type, card_number, token, atm_device_id, balance_amount=None):
+        if activity_type not in [ATMActivityType.SEE_BALANCE, ATMActivityType.DEPOSIT, ATMActivityType.WITHDRAW]:
+            return 'invalid activity type'
         bank_service = BankService()
         atm_service = ATMDeviceService()
         if not bank_service.check_token(card_number, token):
@@ -33,8 +35,6 @@ class MainService(object):
             activity_result = bank_service.get_account_info(card_number, token)
 
         if activity_result is None:
-            if atm_device_id is None:
-                return 'atm_device_id is required'
             if balance_amount is None:
                 return 'balance_amount is required'
             elif balance_amount < 0:
@@ -42,10 +42,8 @@ class MainService(object):
 
             if activity_type == ATMActivityType.DEPOSIT:
                 activity_result = atm_service.deposit_balance(atm_device_id, balance_amount)
-            elif activity_type == ATMActivityType.WITHDRAW:
-                activity_result = atm_service.withdraw_balance(atm_device_id, balance_amount)
             else:
-                return 'invalid activity type'
+                activity_result = atm_service.withdraw_balance(atm_device_id, balance_amount)
 
         # delete token used for identifying user account
         bank_service.remove_token(card_number, token)
